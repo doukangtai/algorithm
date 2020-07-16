@@ -300,6 +300,42 @@ public class Sorts {
     }
 
     /**
+     * 基数排序
+     *
+     * @param arr
+     */
+    static void radixSort(int[] arr) {
+        int max = arr[0];
+        for (int i : arr) {
+            max = Math.max(max, i);
+        }
+        int maxDigit = 0;
+        while (max != 0) {
+            max /= 10;
+            maxDigit++;
+        }
+        ArrayList<ArrayList<Integer>> bucketArr = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            bucketArr.add(new ArrayList<>());
+        }
+        int mod = 10;
+        int div = 1;
+        for (int i = 0; i < maxDigit; i++, mod *= 10, div *= 10) {
+            for (int j = 0; j < arr.length; j++) {
+                int temp = (arr[j] % mod) / div;
+                bucketArr.get(temp).add(arr[j]);
+            }
+            int index = 0;
+            for (ArrayList<Integer> bucket : bucketArr) {
+                for (Integer num : bucket) {
+                    arr[index++] = num;
+                }
+                bucket.clear();
+            }
+        }
+    }
+
+    /**
      * main函数
      *
      * @param args
@@ -316,7 +352,8 @@ public class Sorts {
 //        mergeSort(array, 0, array.length - 1);
 //        heapSort(array);
 //        countSort(array);
-        bucketSort(array, 4);
+//        bucketSort(array, 4);
+        radixSort(array);
         System.out.println(Arrays.toString(array));
     }
 
