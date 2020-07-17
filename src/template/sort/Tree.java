@@ -28,6 +28,7 @@ public class Tree {
 
     /**
      * 前序遍历
+     *
      * @param root
      */
     static void preOrder(Node root) {
@@ -41,6 +42,7 @@ public class Tree {
 
     /**
      * 中序遍历
+     *
      * @param root
      */
     static void inOrder(Node root) {
@@ -54,6 +56,7 @@ public class Tree {
 
     /**
      * 后序遍历
+     *
      * @param root
      */
     static void postOrder(Node root) {
