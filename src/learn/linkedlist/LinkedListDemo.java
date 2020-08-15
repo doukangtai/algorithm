@@ -26,16 +26,17 @@ public class LinkedListDemo {
         singleLinkedList.addByOrder(node4);
         singleLinkedList.addByOrder(node2);
 //        System.out.println("修改node3前");
-//        singleLinkedList.show();
+        System.out.println("原始链表");
+        singleLinkedList.show();
 //        Node updateNode1 = new Node(3, "update1");
 //        singleLinkedList.updateByNo(updateNode1);
 //        System.out.println("修改node3后");
 //        singleLinkedList.show();
-//        singleLinkedList.deleteByNo(1);
+        singleLinkedList.deleteByNo(1);
 //        singleLinkedList.deleteByNo(3);
 //        singleLinkedList.deleteByNo(5);
-//        System.out.println("删除node1");
-//        singleLinkedList.show();
+        System.out.println("删除node1");
+        singleLinkedList.show();
 //        System.out.println("单链表长度");
 //        System.out.println(singleLinkedList.getLength());
 //        System.out.println(singleLinkedList.findLastIndexNode(1));
@@ -44,7 +45,10 @@ public class LinkedListDemo {
 //        singleLinkedList.reverseList();
 //        System.out.println("reverse后");
 //        singleLinkedList.show();
-        singleLinkedList.reversePrint();
+//        singleLinkedList.reversePrint();
+        singleLinkedList.add(node4);
+        System.out.println("添加node4");
+        singleLinkedList.show();
     }
 
 }
