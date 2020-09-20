@@ -16,10 +16,10 @@ public class ArrayQueue {
 
     public ArrayQueue(int maxSize) {
         this.maxSize = maxSize;
-        // front指向队列头数据的前一个位置
-        this.front = -1;
-        // rear指向队列尾的最后一个数据
-        this.rear = -1;
+        // front指向队列头数据
+        this.front = 0;
+        // rear指向队列尾的后一个位置
+        this.rear = 0;
         this.queue = new int[maxSize];
     }
 
@@ -28,25 +28,25 @@ public class ArrayQueue {
     }
 
     public boolean isFull() {
-        return rear == maxSize - 1;
+        return rear == maxSize;
     }
 
     public void add(int element) {
         if (isFull()) {
             throw new RuntimeException("队列满，添加失败");
         }
-        queue[++rear] = element;
+        queue[rear++] = element;
     }
 
     public int get() {
         if (isNull()) {
             throw new RuntimeException("队列空，出队列失败");
         }
-        return queue[++front];
+        return queue[front++];
     }
 
     public void show() {
-        for (int i = front + 1; i <= rear; i++) {
+        for (int i = front; i < rear; i++) {
             System.out.println(i + ":" + queue[i]);
         }
     }
