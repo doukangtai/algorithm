@@ -1,5 +1,7 @@
 package learn.sort;
 
+import learn.tree.HeapSort;
+
 /**
  * @author 窦康泰
  * @date 2020/09/29
@@ -27,7 +29,9 @@ public class SpeedTest {
 //        MergeSort.mergeSort(array, 0, array.length - 1, temp);
 //        System.out.println(Arrays.toString(array));
         // radixSort-----30-----900w-----1410
-        RadixSort.radixSort(array);
+//        RadixSort.radixSort(array);
+        // heapSort-----13-----900w-----1990
+        HeapSort.heapSort(array);
         long afterTimeMillis = getAfterTimeMillis();
         System.out.println(afterTimeMillis - beforeTimeMillis);
     }
