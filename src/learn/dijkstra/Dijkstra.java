@@ -33,7 +33,7 @@ public class Dijkstra {
     }
 
     /**
-     * 迪杰斯特拉
+     * 迪杰斯特拉算法：求指定节点到其它节点的最短距离
      * 先初始化第一个节点，
      * 之后循环更新出发节点到当前节点相邻的其它节点的距离，
      * 在未选择的节点中选择一个距离出发节点最近的节点作为新的当前节点，继续循环，最终得到出发点到其它节点的最短距离
@@ -96,9 +96,9 @@ public class Dijkstra {
             System.out.print("从出发节点\"" + graph.vertex[startIndex] + "\"到节点\"" + graph.vertex[i] + "\"所走的路径为：");
             while (!stack.isEmpty()) {
                 if (stack.size() > 1) {
-                    System.out.print(stack.pop() + "-->");
+                    System.out.print(graph.vertex[stack.pop()] + "-->");
                 } else {
-                    System.out.println(stack.pop());
+                    System.out.println(graph.vertex[stack.pop()]);
                 }
             }
         }
