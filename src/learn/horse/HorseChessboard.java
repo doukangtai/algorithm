@@ -1,6 +1,7 @@
 package learn.horse;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -10,8 +11,11 @@ import java.util.List;
 public class HorseChessboard {
 
     public static void main(String[] args) {
-        Chessboard chessboard = new Chessboard(6);
+        Chessboard chessboard = new Chessboard(9);
+        long start = System.currentTimeMillis();
         horseChessboard(chessboard, 0, 0, 1);
+        long end = System.currentTimeMillis();
+        System.out.println("耗费时间：" + (end - start) + "毫秒");
         for (int i = 0; i < chessboard.board.length; i++) {
             for (int j = 0; j < chessboard.board[i].length; j++) {
                 System.out.printf("%3d", chessboard.board[i][j]);
@@ -33,6 +37,8 @@ public class HorseChessboard {
         chessboard.isVisited[y][x] = true;
         chessboard.board[y][x] = step;
         List<Point> pointList = getNextPoints(chessboard, new Point(x, y));
+        // 排序优化（即按照贪心算法思想，尽可能找pointList中点的下步所能走的步数少的那个点，即减少回溯的次数提高效率）
+        sort(pointList, chessboard);
         for (int i = 0; i < pointList.size(); i++) {
             Point point = pointList.get(i);
             if (!chessboard.isVisited[point.y][point.x]) {
@@ -91,6 +97,28 @@ public class HorseChessboard {
             pointList.add(newPoint);
         }
         return pointList;
+    }
+
+    /**
+     * 按照pointList中点所能到达下一个节点list的大小排序
+     * @param pointList
+     * @param chessboard
+     */
+    public static void sort(List<Point> pointList, Chessboard chessboard) {
+        pointList.sort(new Comparator<Point>() {
+            @Override
+            public int compare(Point o1, Point o2) {
+                List<Point> point1 = getNextPoints(chessboard, o1);
+                List<Point> point2 = getNextPoints(chessboard, o2);
+                if (point1.size() < point2.size()) {
+                    return -1;
+                } else if (point1.size() == point2.size()) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
 
 }
