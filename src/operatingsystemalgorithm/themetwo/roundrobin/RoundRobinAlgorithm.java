@@ -12,6 +12,7 @@ public class RoundRobinAlgorithm {
         roundRobin.createGanttChart();
         roundRobin.showProcessNames();
         roundRobin.showServiceTimes();
+        roundRobin.showTable();
     }
 }
 
@@ -38,13 +39,39 @@ class RoundRobin {
     public double W;
 
     public RoundRobin() {
+//        q = 1;
         q = 4;
         processes = new Process[5];
-        processes[0] = new Process("P1", 0, 26);
-        processes[1] = new Process("P2", 1, 21);
-        processes[2] = new Process("P3", 7, 13);
-        processes[3] = new Process("P4", 15, 12);
-        processes[4] = new Process("P5", 17, 9);
+
+        processes[0] = new Process("P1", 0, 21);
+        processes[1] = new Process("P2", 3, 20);
+        processes[2] = new Process("P3", 12, 15);
+        processes[3] = new Process("P4", 20, 12);
+        processes[4] = new Process("P5", 27, 9);
+
+//        processes[0] = new Process("P1", 0, 6);
+//        processes[1] = new Process("P2", 1, 4);
+//        processes[2] = new Process("P3", 3, 6);
+//        processes[3] = new Process("P4", 7, 5);
+//        processes[4] = new Process("P5", 9, 2);
+
+//        processes[0] = new Process("P1", 0, 4);
+//        processes[1] = new Process("P2", 1, 5);
+//        processes[2] = new Process("P3", 3, 4);
+//        processes[3] = new Process("P4", 7, 5);
+//        processes[4] = new Process("P5", 11, 2);
+
+//        processes[0] = new Process("P1", 0, 19);
+//        processes[1] = new Process("P2", 7, 22);
+//        processes[2] = new Process("P3", 15, 15);
+//        processes[3] = new Process("P4", 22, 9);
+//        processes[4] = new Process("P5", 27, 7);
+
+//        processes[0] = new Process("P1", 0, 26);
+//        processes[1] = new Process("P2", 1, 21);
+//        processes[2] = new Process("P3", 7, 13);
+//        processes[3] = new Process("P4", 15, 12);
+//        processes[4] = new Process("P5", 17, 9);
 
         isInProcessNames = new boolean[processes.length];
 
@@ -53,10 +80,10 @@ class RoundRobin {
             sum += processes[i].serviceTime;
         }
         sum += processes.length * q;
-        processNames = new String[sum / 4];
+        processNames = new String[sum / q];
         processNames[0] = processes[0].name;
         isInProcessNames[0] = true;
-        serviceTimes = new int[sum / 4];
+        serviceTimes = new int[sum / q];
         Prs = new String[processes.length];
         Ft = new int[processes.length];
         At = new int[processes.length];
@@ -68,12 +95,22 @@ class RoundRobin {
     public void createGanttChart() {
         while (frontIndexProcessNames <= rearIndexProcessNames) {
             int processServiceTime = getProcessServiceTime(processNames[frontIndexProcessNames]);
-            if (processServiceTime > q) {
+            if (processServiceTime >= q) {
                 serviceTimes[indexServiceTimes + 1] = serviceTimes[indexServiceTimes] + q;
                 indexServiceTimes++;
                 addProcessToProcessNames(serviceTimes[indexServiceTimes]);
                 updateServiceTime(processNames[frontIndexProcessNames], q);
-                addFrontProcessNameToRear();
+                if (processServiceTime > q) {
+                    addFrontProcessNameToRear();
+                } else if (processServiceTime == q) {
+                    frontIndexProcessNames++;
+                }
+            } else if (processServiceTime > 0) {
+                serviceTimes[indexServiceTimes + 1] = serviceTimes[indexServiceTimes] + processServiceTime;
+                indexServiceTimes++;
+                addProcessToProcessNames(serviceTimes[indexServiceTimes]);
+                updateServiceTime(processNames[frontIndexProcessNames], processServiceTime);
+                frontIndexProcessNames++;
             }
         }
     }
@@ -91,6 +128,7 @@ class RoundRobin {
         for (int i = 0; i < processes.length; i++) {
             if (!isInProcessNames[i] && processes[i].arrivalTime <= currTime) {
                 processNames[++rearIndexProcessNames] = processes[i].name;
+                isInProcessNames[i] = true;
             }
         }
     }
@@ -116,6 +154,38 @@ class RoundRobin {
     public void showServiceTimes() {
         System.out.println("serviceTimes=" + Arrays.toString(serviceTimes));
     }
+
+    public void showTable() {
+        for (int i = processNames.length - 1; i >= 0; i--) {
+            if (processNames[i] != null) {
+                for (int j = Prs.length - 1; j >= 0; j--) {
+                    if (Prs[j] != null && Prs[j].equals(processNames[i])) {
+                        break;
+                    }
+                    if (Prs[j] == null) {
+                        Prs[j] = processNames[i];
+                        Ft[j] = serviceTimes[i + 1];
+                        break;
+                    }
+                }
+            }
+            if (Prs[0] != null) {
+                break;
+            }
+        }
+        int sumTr = 0;
+        double sumWr = 0;
+        for (int i = 0; i < Prs.length; i++) {
+            Process process = getProcess(Prs[i]);
+            Tr[i] = Ft[i] - process.arrivalTime;
+            Wr[i] = Tr[i] * 1.0 / process.saveServiceTime;
+            sumTr += Tr[i];
+            sumWr += Wr[i];
+            System.out.printf("%5s%5d%5d%5d%5d%8.3f\n", Prs[i], Ft[i], process.arrivalTime, Tr[i], process.saveServiceTime, Wr[i]);
+        }
+        System.out.printf("T=%.2f\n", sumTr * 1.0 / processes.length);
+        System.out.printf("W=%.2f\n", sumWr * 1.0 / processes.length);
+    }
 }
 
 class Process {
@@ -123,10 +193,13 @@ class Process {
     public int arrivalTime;
     public int serviceTime;
 
+    public int saveServiceTime;
+
     public Process(String name, int arrivalTime, int serviceTime) {
         this.name = name;
         this.arrivalTime = arrivalTime;
         this.serviceTime = serviceTime;
+        this.saveServiceTime = serviceTime;
     }
 
     @Override
@@ -135,6 +208,7 @@ class Process {
                 "name='" + name + '\'' +
                 ", arrivalTime=" + arrivalTime +
                 ", serviceTime=" + serviceTime +
+                ", saveServiceTime=" + saveServiceTime +
                 '}';
     }
 }
