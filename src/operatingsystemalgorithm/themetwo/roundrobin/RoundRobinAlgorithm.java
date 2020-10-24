@@ -38,6 +38,9 @@ class RoundRobin {
     public double T;
     public double W;
 
+    /**
+     * 初始化数据
+     */
     public RoundRobin() {
 //        q = 1;
         q = 4;
@@ -92,38 +95,67 @@ class RoundRobin {
         Wr = new double[processes.length];
     }
 
+    /**
+     * 轮转调度算法
+     */
     public void createGanttChart() {
         while (frontIndexProcessNames <= rearIndexProcessNames) {
+            // 获取制定进程的serviceTime
             int processServiceTime = getProcessServiceTime(processNames[frontIndexProcessNames]);
+            // 判断需要服务的时间是否大于一个轮转周期
             if (processServiceTime >= q) {
+                // 更新服务时间数组
                 serviceTimes[indexServiceTimes + 1] = serviceTimes[indexServiceTimes] + q;
+                // 索引后移
                 indexServiceTimes++;
+                // 将可以入队列的进程加入进来
                 addProcessToProcessNames(serviceTimes[indexServiceTimes]);
+                // 更新进程的服务时间
                 updateServiceTime(processNames[frontIndexProcessNames], q);
                 if (processServiceTime > q) {
+                    // 进程还需要继续被服务，再入队列指针后移
                     addFrontProcessNameToRear();
                 } else if (processServiceTime == q) {
+                    // 最后剩余服务时间刚好够一个q，不再入队列，指针直接后移
                     frontIndexProcessNames++;
                 }
             } else if (processServiceTime > 0) {
+                // 剩余服务时间大于0并且小于q
+                // 更新服务时间数组
                 serviceTimes[indexServiceTimes + 1] = serviceTimes[indexServiceTimes] + processServiceTime;
+                // 索引后移
                 indexServiceTimes++;
+                // 将可以入队列的进程加入进来
                 addProcessToProcessNames(serviceTimes[indexServiceTimes]);
+                // 更新进程的服务时间
                 updateServiceTime(processNames[frontIndexProcessNames], processServiceTime);
+                // 服务完，不再入队列，指针直接后移
                 frontIndexProcessNames++;
             }
         }
     }
 
+    /**
+     * 将没服务完的进程继续添加到队列尾
+     */
     public void addFrontProcessNameToRear() {
         processNames[++rearIndexProcessNames] = processNames[frontIndexProcessNames++];
     }
 
+    /**
+     * 更新进程的服务时间
+     * @param processName 进程名
+     * @param time 需要减少的服务时间
+     */
     public void updateServiceTime(String processName, int time) {
         Process process = getProcess(processName);
         process.serviceTime = process.serviceTime - time;
     }
 
+    /**
+     * 将进程添加进processName中
+     * @param currTime
+     */
     public void addProcessToProcessNames(int currTime) {
         for (int i = 0; i < processes.length; i++) {
             if (!isInProcessNames[i] && processes[i].arrivalTime <= currTime) {
@@ -133,11 +165,21 @@ class RoundRobin {
         }
     }
 
+    /**
+     * 获取制定进程的服务时间
+     * @param processName
+     * @return
+     */
     public int getProcessServiceTime(String processName) {
         Process process = getProcess(processName);
         return process.serviceTime;
     }
 
+    /**
+     * 获取制定进程
+     * @param processName
+     * @return
+     */
     public Process getProcess(String processName) {
         for (int i = 0; i < processes.length; i++) {
             if (processes[i].name.equals(processName)) {
@@ -193,6 +235,7 @@ class Process {
     public int arrivalTime;
     public int serviceTime;
 
+    // 保存一份serviceTime
     public int saveServiceTime;
 
     public Process(String name, int arrivalTime, int serviceTime) {
