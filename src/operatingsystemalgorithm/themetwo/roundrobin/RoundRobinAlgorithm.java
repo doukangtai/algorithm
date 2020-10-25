@@ -1,6 +1,6 @@
 package operatingsystemalgorithm.themetwo.roundrobin;
 
-import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * @author 窦康泰
@@ -8,10 +8,13 @@ import java.util.Arrays;
  */
 public class RoundRobinAlgorithm {
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
         RoundRobin roundRobin = new RoundRobin();
         roundRobin.createGanttChart();
-        roundRobin.showProcessNames();
-        roundRobin.showServiceTimes();
+        roundRobin.showGanttChart();
         roundRobin.showTable();
     }
 }
@@ -42,15 +45,33 @@ class RoundRobin {
      * 初始化数据
      */
     public RoundRobin() {
+        System.out.println("时间片轮转调度算法");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("请输入 q = ");
+        q = scanner.nextInt();
 //        q = 1;
-        q = 4;
+//        q = 4;
         processes = new Process[5];
 
-        processes[0] = new Process("P1", 0, 21);
-        processes[1] = new Process("P2", 3, 20);
-        processes[2] = new Process("P3", 12, 15);
-        processes[3] = new Process("P4", 20, 12);
-        processes[4] = new Process("P5", 27, 9);
+        int[] at = new int[5];
+        int[] st = new int[5];
+        System.out.print("请输入到达时间Arrival Time（空格分隔）：");
+        for (int i = 0; i < at.length; i++) {
+            at[i] = scanner.nextInt();
+        }
+        System.out.print("请输入服务时间Service Time（空格分隔）：");
+        for (int i = 0; i < st.length; i++) {
+            st[i] = scanner.nextInt();
+        }
+        for (int i = 0; i < processes.length; i++) {
+            processes[i] = new Process("P" + (i + 1), at[i], st[i]);
+        }
+
+//        processes[0] = new Process("P1", 0, 21);
+//        processes[1] = new Process("P2", 3, 20);
+//        processes[2] = new Process("P3", 12, 15);
+//        processes[3] = new Process("P4", 20, 12);
+//        processes[4] = new Process("P5", 27, 9);
 
 //        processes[0] = new Process("P1", 0, 6);
 //        processes[1] = new Process("P2", 1, 4);
@@ -144,8 +165,9 @@ class RoundRobin {
 
     /**
      * 更新进程的服务时间
+     *
      * @param processName 进程名
-     * @param time 需要减少的服务时间
+     * @param time        需要减少的服务时间
      */
     public void updateServiceTime(String processName, int time) {
         Process process = getProcess(processName);
@@ -154,6 +176,7 @@ class RoundRobin {
 
     /**
      * 将进程添加进processName中
+     *
      * @param currTime
      */
     public void addProcessToProcessNames(int currTime) {
@@ -167,6 +190,7 @@ class RoundRobin {
 
     /**
      * 获取制定进程的服务时间
+     *
      * @param processName
      * @return
      */
@@ -177,6 +201,7 @@ class RoundRobin {
 
     /**
      * 获取制定进程
+     *
      * @param processName
      * @return
      */
@@ -189,15 +214,25 @@ class RoundRobin {
         return null;
     }
 
-    public void showProcessNames() {
-        System.out.println("processNames=" + Arrays.toString(processNames));
-    }
-
-    public void showServiceTimes() {
-        System.out.println("serviceTimes=" + Arrays.toString(serviceTimes));
+    public void showGanttChart() {
+        System.out.println("Gantt Chart:");
+        System.out.print("  ");
+        for (int i = 0; i < processNames.length; i++) {
+            if (processNames[i] != null) {
+                System.out.printf("%-4s", processNames[i]);
+            }
+        }
+        System.out.println();
+        for (int i = 0; i < serviceTimes.length; i++) {
+            if (serviceTimes[i] != 0 || i == 0) {
+                System.out.printf("%-4d", serviceTimes[i]);
+            }
+        }
+        System.out.println();
     }
 
     public void showTable() {
+        System.out.println("Table");
         for (int i = processNames.length - 1; i >= 0; i--) {
             if (processNames[i] != null) {
                 for (int j = Prs.length - 1; j >= 0; j--) {
@@ -223,7 +258,7 @@ class RoundRobin {
             Wr[i] = Tr[i] * 1.0 / process.saveServiceTime;
             sumTr += Tr[i];
             sumWr += Wr[i];
-            System.out.printf("%5s%5d%5d%5d%5d%8.3f\n", Prs[i], Ft[i], process.arrivalTime, Tr[i], process.saveServiceTime, Wr[i]);
+            System.out.printf("%-5s%-5d%-5d%-5d%-5d%-8.3f\n", Prs[i], Ft[i], process.arrivalTime, Tr[i], process.saveServiceTime, Wr[i]);
         }
         System.out.printf("T=%.2f\n", sumTr * 1.0 / processes.length);
         System.out.printf("W=%.2f\n", sumWr * 1.0 / processes.length);

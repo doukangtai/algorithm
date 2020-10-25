@@ -1,6 +1,7 @@
 package operatingsystemalgorithm.themefour.lru;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * @author 窦康泰
@@ -10,6 +11,11 @@ import java.util.Arrays;
 public class LeastRecentlyUsed {
 
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
+        System.out.println("LRU页面置换算法");
         Init init = new Init();
         Optimal optimal = new Optimal(init);
         for (int i = 1; i < optimal.rs.length; i++) {
@@ -42,6 +48,7 @@ public class LeastRecentlyUsed {
 
     /**
      * 获取指定索引之前最后一次替换的page数组
+     *
      * @param ram
      * @param lastIndex
      * @return
@@ -66,10 +73,11 @@ public class LeastRecentlyUsed {
 
     /**
      * 进行页面的替换
+     *
      * @param optimal
-     * @param currIndex 当前rs的索引
+     * @param currIndex    当前rs的索引
      * @param replaceIndex ram中page需要被替换的索引
-     * @param lastRamPage 上次被替换的page
+     * @param lastRamPage  上次被替换的page
      */
     public static void replace(Optimal optimal, int currIndex, int replaceIndex, int[] lastRamPage) {
         for (int i = 0; i < optimal.ram.length; i++) {
@@ -84,6 +92,7 @@ public class LeastRecentlyUsed {
 
     /**
      * 直接在page中插入一个rs[currIndex]
+     *
      * @param optimal
      * @param currIndex
      */
@@ -101,6 +110,7 @@ public class LeastRecentlyUsed {
 
     /**
      * 获取page中需要被替换的index
+     *
      * @param page
      * @param rs
      * @param currIndex
@@ -134,6 +144,7 @@ public class LeastRecentlyUsed {
 
     /**
      * 判断rs的页是否在page中
+     *
      * @param num
      * @param page
      * @return
@@ -149,6 +160,7 @@ public class LeastRecentlyUsed {
 
     /**
      * 判断page是否满
+     *
      * @param page
      * @return
      */
@@ -186,37 +198,37 @@ class Optimal {
     }
 
     public void showpr() {
-        System.out.print("pr=");
+        System.out.print(" PR:");
         for (int i = 1; i < pr.length; i++) {
-            if (i == 1) {
-                System.out.print(pr[i]);
+            if (pr[i] == -1) {
+                System.out.print("  ");
             } else {
-                System.out.print("," + pr[i]);
+                System.out.print(" " + pr[i]);
             }
         }
         System.out.println();
     }
 
     public void showrs() {
-        System.out.print("rs=");
+        System.out.print(" RS:");
         for (int i = 1; i < rs.length; i++) {
-            if (i == 1) {
-                System.out.print(rs[i]);
-            } else {
-                System.out.print("," + rs[i]);
-            }
+            System.out.print(" " + rs[i]);
         }
         System.out.println();
     }
 
     public void showRam() {
-        System.out.println("ram内容：");
         for (int i = 0; i < ram.length; i++) {
+            if (i == 0) {
+                System.out.print("RAM:");
+            } else {
+                System.out.print("    ");
+            }
             for (int j = 1; j < ram[i].length; j++) {
-                if (j == 1) {
-                    System.out.print(ram[i][j]);
+                if (ram[i][j] == -1) {
+                    System.out.print("  ");
                 } else {
-                    System.out.print("," + ram[i][j]);
+                    System.out.print(" " + ram[i][j]);
                 }
             }
             System.out.println();
@@ -245,6 +257,7 @@ class Optimal {
 
     public void showReplacedList() {
         int count = 0;
+        System.out.print("Pages=");
         for (int i = 0; i < pr.length; i++) {
             if (pr[i] != -1) {
                 if (count == 0) {
@@ -255,6 +268,7 @@ class Optimal {
                 }
             }
         }
+        System.out.println();
     }
 }
 
@@ -270,9 +284,27 @@ class Init {
 //    }
 
     public Init() {
-        frameSize = 4;
-        page = new int[]{};
-        rs = new int[]{6, 5, 6, 4, 1, 0, 3, 7, 1, 3, 1, 4, 1, 0, 4, 1, 0, 5, 3, 2, 0, 5, 4};
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("请输入物理块大小（Frame）：");
+        frameSize = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("请输入已装入的页面（空格分隔，若没有页面，直接回车键）：");
+        String pageStr = scanner.nextLine();
+        if (pageStr.length() > 0) {
+            String[] pageStrArr = pageStr.split(" ");
+            page = new int[pageStrArr.length];
+            for (int i = 0; i < pageStrArr.length; i++) {
+                page[i] = Integer.parseInt(pageStrArr[i]);
+            }
+        } else {
+            page = new int[0];
+        }
+        System.out.print("请输入页面访问串（空格分隔）：");
+        String[] rsStrArr = scanner.nextLine().split(" ");
+        rs = new int[rsStrArr.length];
+        for (int i = 0; i < rsStrArr.length; i++) {
+            rs[i] = Integer.parseInt(rsStrArr[i]);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package operatingsystemalgorithm.themefour.clock;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * @author 窦康泰
@@ -10,6 +11,10 @@ import java.util.Arrays;
 public class Clock {
 
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
         Init init = new Init();
         Optimal optimal = new Optimal(init);
         for (int i = 1; i < optimal.rs.length; i++) {
@@ -161,37 +166,37 @@ class Optimal {
     }
 
     public void showpr() {
-        System.out.print("pr=");
+        System.out.print(" PR:");
         for (int i = 1; i < pr.length; i++) {
-            if (i == 1) {
-                System.out.print(pr[i]);
+            if (pr[i] == -1) {
+                System.out.print("  ");
             } else {
-                System.out.print("," + pr[i]);
+                System.out.print(" " + pr[i]);
             }
         }
         System.out.println();
     }
 
     public void showrs() {
-        System.out.print("rs=");
+        System.out.print(" RS:");
         for (int i = 1; i < rs.length; i++) {
-            if (i == 1) {
-                System.out.print(rs[i]);
-            } else {
-                System.out.print("," + rs[i]);
-            }
+            System.out.print(" " + rs[i]);
         }
         System.out.println();
     }
 
     public void showRam() {
-        System.out.println("ram内容：");
         for (int i = 0; i < ram.length; i++) {
+            if (i == 0) {
+                System.out.print("RAM:");
+            } else {
+                System.out.print("    ");
+            }
             for (int j = 1; j < ram[i].length; j++) {
-                if (j == 1) {
-                    System.out.print(ram[i][j]);
+                if (ram[i][j] == -1) {
+                    System.out.print("  ");
                 } else {
-                    System.out.print("," + ram[i][j]);
+                    System.out.print(" " + ram[i][j]);
                 }
             }
             System.out.println();
@@ -219,8 +224,8 @@ class Optimal {
     }
 
     public void showReplacedList() {
-        System.out.print("pages=");
         int count = 0;
+        System.out.print("Pages=");
         for (int i = 0; i < pr.length; i++) {
             if (pr[i] != -1) {
                 if (count == 0) {
@@ -256,21 +261,62 @@ class Init {
     public int[] isVisited;
     public int nf;
 
-//    public Init() {
+    public Init() {
+        System.out.println("Clock页面置换算法");
+        System.out.print("请输入物理块大小（Frame）：");
+        Scanner scanner = new Scanner(System.in);
+        frameSize = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("请输入已装入的页面（空格分隔，若没有页面，直接回车键）：");
+        String pageStr = scanner.nextLine();
+        if (pageStr.length() > 0) {
+            String[] pageStrArr = pageStr.split(" ");
+            page = new int[pageStrArr.length];
+            for (int i = 0; i < pageStrArr.length; i++) {
+                page[i] = Integer.parseInt(pageStrArr[i]);
+            }
+        } else {
+            page = new int[0];
+        }
+        System.out.print("请输入访问位（空格分隔，若没有访问位，直接回车键）：");
+        String isVisitedStr = scanner.nextLine();
+        if (isVisitedStr.length() > 0) {
+            String[] isVisitedArr = isVisitedStr.split(" ");
+            isVisited = new int[isVisitedArr.length];
+            for (int i = 0; i < isVisitedArr.length; i++) {
+                isVisited[i] = Integer.parseInt(isVisitedArr[i]);
+            }
+        } else {
+            isVisited = new int[0];
+        }
+        System.out.print("输入0代表替换指针NF开始指向最低地址的物理块，输入1代表指向最高地址：");
+        if (scanner.nextInt() == 0) {
+            nf = 0;
+        } else {
+            nf = frameSize - 1;
+        }
+        scanner.nextLine();
+        System.out.print("请输入页面访问串（空格分隔）：");
+        String[] rsStrArr = scanner.nextLine().split(" ");
+        rs = new int[rsStrArr.length];
+        for (int i = 0; i < rsStrArr.length; i++) {
+            rs[i] = Integer.parseInt(rsStrArr[i]);
+        }
+
 //        frameSize = 5;
 //        page = new int[]{2, 6, 7, 3};
 //        isVisited = new int[]{0, 1, 1, 0};
 //        nf = frameSize - 1;
 //        rs = new int[]{0, 4, 7, 1, 2, 6, 1, 4, 6, 0, 1, 0, 5, 2, 7, 1, 4, 7, 6, 0, 4, 0, 7, 2};
-//    }
-
-    public Init() {
-        frameSize = 5;
-        page = new int[]{};
-        isVisited = new int[]{};
-        nf = 0;
-        rs = new int[]{5, 2, 6, 1, 5, 4, 5, 6, 4, 0, 2, 1, 7, 2, 5, 2, 3, 0, 4, 2, 4, 6, 5, 6};
     }
+
+//    public Init() {
+//        frameSize = 5;
+//        page = new int[]{};
+//        isVisited = new int[]{};
+//        nf = 0;
+//        rs = new int[]{5, 2, 6, 1, 5, 4, 5, 6, 4, 0, 2, 1, 7, 2, 5, 2, 3, 0, 4, 2, 4, 6, 5, 6};
+//    }
 
     @Override
     public String toString() {
