@@ -23,12 +23,10 @@ public class BankerAlgorithm {
     }
 
     public static void start() {
+        // 初始化给定数据
         init();
-        initNeed();
+        // 调用银行家算法
         bankerAlgorithm();
-        System.out.println();
-        System.out.println();
-        System.out.println();
         showFirstTable();
         showSecondTable();
     }
@@ -95,18 +93,32 @@ public class BankerAlgorithm {
         }
     }
 
+    /**
+     * 银行家算法思想
+     */
     public static void bankerAlgorithm() {
+        // 计算need
+        initNeed();
+        // 获取Available数组
         int[] tempAvailable = getOriginalAvailable();
         for (int i = 0; i < processCount; i++) {
+            // 获取一个可以执行的进程
             Process isExeProcess = getIsExeProcess(tempAvailable);
+            // 将指向这个可执行进程的指针下移
             pointerMove();
+            // 将可执行进程添加进List中
             processList.add(isExeProcess);
             for (int j = 0; j < tempAvailable.length; j++) {
+                // 计算当前可执行进程在执行完之后系统剩余可利用资源，即：Work+Allocation
                 tempAvailable[j] = isExeProcess.work[j] + isExeProcess.allocation[j];
             }
         }
     }
 
+    /**
+     * 获取最初没执行任何一个进程时，系统可用资源数组
+     * @return
+     */
     public static int[] getOriginalAvailable() {
         int[] tempAvailable = new int[resourceCount];
         for (int i = 0; i < resourceCount; i++) {
@@ -119,6 +131,11 @@ public class BankerAlgorithm {
         return tempAvailable;
     }
 
+    /**
+     * 获取一个可以执行的进程
+     * @param tempAvailable 当前可用资源总量数组
+     * @return
+     */
     public static Process getIsExeProcess(int[] tempAvailable) {
         int breakCount = 0;
         while (true) {
@@ -143,6 +160,9 @@ public class BankerAlgorithm {
         return null;
     }
 
+    /**
+     * 5个进程循环扫描，指针移动方法
+     */
     public static void pointerMove() {
         if (pointer != processCount - 1) {
             pointer++;
@@ -151,6 +171,9 @@ public class BankerAlgorithm {
         }
     }
 
+    /**
+     * 计算need的值
+     */
     public static void initNeed() {
         for (int i = 0; i < processes.length; i++) {
             int tempCount = 3;
@@ -160,6 +183,9 @@ public class BankerAlgorithm {
         }
     }
 
+    /**
+     * 初始化以及输入数据
+     */
     public static void init() {
         System.out.print("请输入全部资源总量（空格分隔）：");
         Scanner scanner = new Scanner(System.in);
@@ -192,6 +218,9 @@ class Process {
     public int[] allocation;
     public int[] need;
     public int[] work;
+    /**
+     * 判断进程是否已经执行过
+     */
     public boolean isUsed;
 
     public Process(String name, int[] max, int[] allocation, int[] need, int[] work) {
