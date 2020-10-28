@@ -52,19 +52,16 @@ public class ProcessSynchronizationModel {
     public static void start() {
         init();
         getOrder();
-        showInfo();
-        System.out.println();
-        System.out.println();
-        System.out.println();
+        showOrder();
         getInstruction();
     }
 
     public static void getInstruction() {
-        System.out.println("Initialization   L.Value    R.Value    Q.Value");
-        System.out.print("                    ");
+        System.out.println("Initialization   L.Value   R.Value   Q.Value");
+        System.out.print("            ");
         for (int i = 2; i < 5; i++) {
             Integer value = valueList.get(i);
-            System.out.printf("%-10d", value);
+            System.out.printf("%10d", value);
         }
         System.out.println();
         for (int i = 0; i < order.size(); i++) {
@@ -73,11 +70,11 @@ public class ProcessSynchronizationModel {
                 int index = Integer.parseInt(prcOrderName.charAt(1) + "");
                 String exp = processExpressionArrayA[index - 1];
                 if (keyList.contains(exp.charAt(0) + "")) {
-                    System.out.printf("%-15s", exp);
+                    System.out.printf("%-20s", exp);
                     if (exp.charAt(2) > '0' && exp.charAt(2) < '9') {
                         int indexVar = keyList.indexOf(exp.charAt(0) + "");
                         valueList.set(indexVar, Integer.parseInt(exp.substring(2)));
-                        System.out.printf("%-10d%-10d%-10d\n", valueList.get(2), valueList.get(3), valueList.get(4));
+                        System.out.printf("%-10d%-10d%d\n", valueList.get(2), valueList.get(3), valueList.get(4));
                     } else {
                         int index1 = keyList.indexOf(exp.charAt(0) + "");
                         int index2 = keyList.indexOf(exp.charAt(2) + "");
@@ -86,10 +83,10 @@ public class ProcessSynchronizationModel {
                         Integer v3 = valueList.get(index3);
                         if (exp.charAt(3) == '+') {
                             valueList.set(index1, v2 + v3);
-                            System.out.printf("%-10d%-10d%-10d\n", valueList.get(2), valueList.get(3), valueList.get(4));
+                            System.out.printf("%-10d%-10d%d\n", valueList.get(2), valueList.get(3), valueList.get(4));
                         } else {
                             valueList.set(index1, v2 - v3);
-                            System.out.printf("%-10d%-10d%-10d\n", valueList.get(2), valueList.get(3), valueList.get(4));
+                            System.out.printf("%-10d%-10d%d\n", valueList.get(2), valueList.get(3), valueList.get(4));
                         }
                     }
                 }
@@ -97,11 +94,11 @@ public class ProcessSynchronizationModel {
                 int index = Integer.parseInt(prcOrderName.charAt(1) + "");
                 String exp = processExpressionArrayB[index - 1];
                 if (keyList.contains(exp.charAt(0) + "")) {
-                    System.out.printf("%-15s", exp);
+                    System.out.printf("%-20s", exp);
                     if (exp.charAt(2) > '0' && exp.charAt(2) < '9') {
                         int indexVar = keyList.indexOf(exp.charAt(0) + "");
                         valueList.set(indexVar, Integer.parseInt(exp.substring(2)));
-                        System.out.printf("%-10d%-10d%-10d\n", valueList.get(2), valueList.get(3), valueList.get(4));
+                        System.out.printf("%-10d%-10d%d\n", valueList.get(2), valueList.get(3), valueList.get(4));
                     } else {
                         int index1 = keyList.indexOf(exp.charAt(0) + "");
                         int index2 = keyList.indexOf(exp.charAt(2) + "");
@@ -110,16 +107,16 @@ public class ProcessSynchronizationModel {
                         Integer v3 = valueList.get(index3);
                         if (exp.charAt(3) == '+') {
                             valueList.set(index1, v2 + v3);
-                            System.out.printf("%-10d%-10d%-10d\n", valueList.get(2), valueList.get(3), valueList.get(4));
+                            System.out.printf("%-10d%-10d%d\n", valueList.get(2), valueList.get(3), valueList.get(4));
                         } else {
                             valueList.set(index1, v2 - v3);
-                            System.out.printf("%-10d%-10d%-10d\n", valueList.get(2), valueList.get(3), valueList.get(4));
+                            System.out.printf("%-10d%-10d%d\n", valueList.get(2), valueList.get(3), valueList.get(4));
                         }
                     }
                 }
             }
         }
-        System.out.printf("%20d%10d%10d\n", valueList.get(2), valueList.get(3), valueList.get(4));
+        System.out.printf("Final value         %-10d%-10d%d\n", valueList.get(2), valueList.get(3), valueList.get(4));
     }
 
     public static void getOrder() {
@@ -204,17 +201,12 @@ public class ProcessSynchronizationModel {
         }
     }
 
-    public static void showInfo() {
-        System.out.println("processNameA:" + processNameA);
-        System.out.println("processNameB:" + processNameB);
-        System.out.println("priority:" + priority);
-        System.out.println("processExpressionArrayA:" + Arrays.toString(processExpressionArrayA));
-        System.out.println("processExpressionArrayB:" + Arrays.toString(processExpressionArrayB));
-        System.out.println("keyList:" + keyList);
-        System.out.println("valueList:" + valueList);
-        System.out.println("preemptive:" + preemptive);
-        System.out.println("order:" + order);
-        System.out.println("currProcess:" + currProcess);
+    public static void showOrder() {
+        System.out.print("Order：");
+        for (int i = 0; i < order.size(); i++) {
+            System.out.printf("%3s", order.get(i));
+        }
+        System.out.println();
     }
 
     public static void init() {
