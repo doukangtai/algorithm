@@ -92,6 +92,9 @@ public class Main {
         boolean isModifyHead = isModifyHead(msg);
         if (isModifyHead) {
             System.out.println("乖！不要乱改。");
+            writeToFileNotAppendNotWithRN(s1);
+            writeToFileAppendWithRN(s2);
+            writeToFileAppendWithRN(s3);
             return;
         } else {
             if (msg.size() > 3) {
@@ -100,12 +103,19 @@ public class Main {
                 boolean isValidityPcId = getEncodePcId().equals(msg.get(4));
                 if (keyIsExpire) {
                     System.out.println("key过期了");
+                    writeToFileNotAppendNotWithRN(s1);
+                    writeToFileAppendWithRN(s2);
+                    writeToFileAppendWithRN(s3);
                     return;
                 }
                 if (!isValidityPcId) {
                     System.out.println("禁止复制传播的");
+                    writeToFileNotAppendNotWithRN(s1);
+                    writeToFileAppendWithRN(s2);
+                    writeToFileAppendWithRN(s3);
                     return;
                 }
+                System.out.println("激活码到期时间：" + getFormatExpireTime(msg.get(3)));
             } else {
                 // 激活
                 System.out.print("请输入激活码：");
@@ -148,6 +158,9 @@ public class Main {
     }
 
     public static boolean isModifyHead(List<String> msg) {
+        if (msg.size() < 3) {
+            return true;
+        }
         if (!s1.equals(msg.get(0)) || !s2.equals(msg.get(1)) || !s3.equals(msg.get(2))) {
             return true;
         }
@@ -196,6 +209,44 @@ public class Main {
         }
     }
 
+    public static void writeToFileNotAppendNotWithRN(String key) {
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(new File(filePath)));
+            bufferedWriter.write(key);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void writeToFileAppendWithRN(String key) {
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(new File(filePath), true));
+            bufferedWriter.write("\r\n" + key);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static boolean judgeKeyIsExpire(String key) {
         String oriStr = decodeStr(key);
         String expireTime = oriStr.split(" ")[1];
@@ -212,10 +263,10 @@ public class Main {
         return ctm > vt;
     }
 
-    public static String getKey(int keyValidityOfSec, int osaExpireOfDay) {
+    public static String getKey(long keyValidityOfSec, double osaExpireOfDay) {
         long ctm = System.currentTimeMillis();
         String keyValidityStr = ctm + keyValidityOfSec * 1000 + "";
-        String osaExpireStr = ctm + osaExpireOfDay * 24 * 60 * 60 * 1000 + "";
+        String osaExpireStr = ctm + (long) (osaExpireOfDay * 1000 * 24 * 60 * 60) + "";
         String oriKey = keyValidityStr + " " + osaExpireStr;
         String encodeStr = encodeStr(oriKey);
         return encodeStr;

@@ -20,7 +20,7 @@ public class Key {
         System.out.print("请输入key的有效时间（秒）：");
         int va = scanner.nextInt();
         System.out.print("请输入key的过期时间（天）：");
-        int ex = scanner.nextInt();
+        double ex = scanner.nextDouble();
         String key = Main.getKey(va, ex);
         BufferedWriter bufferedWriter = null;
         try {
