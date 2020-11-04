@@ -1,5 +1,10 @@
 package operatingsystemalgorithm.entrance;
 
+import operatingsystemalgorithm.themeeight.Concept;
+import operatingsystemalgorithm.themefive.cscan.CircularScan;
+import operatingsystemalgorithm.themefive.nstepcscan.NStepCScan;
+import operatingsystemalgorithm.themefive.nstepscan.NStepScan;
+import operatingsystemalgorithm.themefive.scan.ElevatorAlgorithm;
 import operatingsystemalgorithm.themefour.clock.Clock;
 import operatingsystemalgorithm.themefour.lru.LeastRecentlyUsed;
 import operatingsystemalgorithm.themefour.opt.OptimalReplacementAlgorithm;
@@ -34,6 +39,11 @@ public class Main {
             System.out.println("41.专题四Optimal页面置换算法");
             System.out.println("42.专题四LRU页面置换算法");
             System.out.println("43.专题四Clock页面置换算法");
+            System.out.println("51.专题五SCAN磁盘调度算法");
+            System.out.println("52.专题五CSCAN磁盘调度算法");
+            System.out.println("53.专题五N-step-SCAN磁盘调度算法");
+            System.out.println("54.专题五N-step-CSCAN磁盘调度算法");
+            System.out.println("8.专题八基本概念");
             System.out.print("输入序号选择要使用的算法:");
             Scanner scanner = new Scanner(System.in);
             int num = scanner.nextInt();
@@ -55,6 +65,21 @@ public class Main {
                     break;
                 case 43:
                     Clock.start();
+                    break;
+                case 51:
+                    ElevatorAlgorithm.start();
+                    break;
+                case 52:
+                    CircularScan.start();
+                    break;
+                case 53:
+                    NStepScan.start();
+                    break;
+                case 54:
+                    NStepCScan.start();
+                    break;
+                case 8:
+                    Concept.start();
                     break;
                 default:
                     break;
