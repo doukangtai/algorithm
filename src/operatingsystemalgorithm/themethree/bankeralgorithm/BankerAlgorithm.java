@@ -16,7 +16,7 @@ public class BankerAlgorithm {
     public static int processCount = 5;
     public static int resourceCount = 3;
     public static int pointer = 0;
-    public static List<Process> processList = new ArrayList<>();
+    public static List<Process> processList;
 
     public static void main(String[] args) {
         start();
@@ -109,6 +109,7 @@ public class BankerAlgorithm {
         initNeed();
         // 获取Available数组
         int[] tempAvailable = getOriginalAvailable();
+        processList = new ArrayList<>();
         for (int i = 0; i < processCount; i++) {
             // 获取一个可以执行的进程
             Process isExeProcess = getIsExeProcess(tempAvailable);
