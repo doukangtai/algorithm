@@ -40,27 +40,21 @@ public class Main {
             switch (num) {
                 case 1:
                     ProcessSynchronizationModel.start();
-                    System.out.println();
                     break;
                 case 2:
                     RoundRobinAlgorithm.start();
-                    System.out.println();
                     break;
                 case 3:
                     BankerAlgorithm.start();
-                    System.out.println();
                     break;
                 case 41:
                     OptimalReplacementAlgorithm.start();
-                    System.out.println();
                     break;
                 case 42:
                     LeastRecentlyUsed.start();
-                    System.out.println();
                     break;
                 case 43:
                     Clock.start();
-                    System.out.println();
                     break;
                 default:
                     break;

@@ -27,32 +27,40 @@ public class BankerAlgorithm {
         init();
         // 调用银行家算法
         bankerAlgorithm();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("==============================================================");
         showFirstTable();
         showSecondTable();
+        System.out.println("==============================================================");
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
     public static void showSecondTable() {
         System.out.println("Process        Work            Need         Allocation   Work+Allocation   Finish");
-        System.out.println("\t\t\tA   B   C\t\tA   B   C\t\tA   B   C\t\tA   B   C");
+        System.out.println("            A   B   C       A   B   C       A   B   C       A   B   C");
         for (int i = 0; i < processList.size(); i++) {
             Process process = processList.get(i);
-            System.out.print("  " + process.name + "\t\t");
+            System.out.print("  " + process.name + "        ");
             for (int j = 0; j < process.work.length; j++) {
                 System.out.printf("%-4d", process.work[j]);
             }
-            System.out.print("\t");
+            System.out.print("    ");
             for (int j = 0; j < process.need.length; j++) {
                 System.out.printf("%-4d", process.need[j]);
             }
-            System.out.print("\t");
+            System.out.print("    ");
             for (int j = 0; j < process.allocation.length; j++) {
                 System.out.printf("%-4d", process.allocation[j]);
             }
-            System.out.print("\t");
+            System.out.print("    ");
             for (int j = 0; j < resourceCount; j++) {
                 System.out.printf("%-4d", process.work[j] + process.allocation[j]);
             }
-            System.out.println("\ttrue");
+            System.out.println("    true");
         }
         System.out.println("Therefore,To is a (safe) state");
         System.out.print("Safe sequence is {");
@@ -68,22 +76,22 @@ public class BankerAlgorithm {
 
     public static void showFirstTable() {
         System.out.println("Process    Max          Allocation        Need          Available");
-        System.out.println("\t\tA   B   C\t\tA   B   C\t\tA   B   C\t\tA   B   C");
+        System.out.println("          A   B   C       A   B   C       A   B   C       A   B   C");
         for (int i = 0; i < processes.length; i++) {
-            System.out.print(processes[i].name + "\t\t");
+            System.out.print(processes[i].name + "        ");
             for (int j = 0; j < resourceCount; j++) {
                 System.out.printf("%-4d", processes[i].max[j]);
             }
-            System.out.print("\t");
+            System.out.print("    ");
             for (int j = 0; j < resourceCount; j++) {
                 System.out.printf("%-4d", processes[i].allocation[j]);
             }
-            System.out.print("\t");
+            System.out.print("    ");
             for (int j = 0; j < resourceCount; j++) {
                 System.out.printf("%-4d", processes[i].need[j]);
             }
             if (i == 0) {
-                System.out.print("\t");
+                System.out.print("    ");
                 int[] originalAvailable = getOriginalAvailable();
                 for (int j = 0; j < originalAvailable.length; j++) {
                     System.out.printf("%-4d", originalAvailable[j]);

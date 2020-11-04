@@ -30,6 +30,10 @@ public class Clock {
                 updateIsVisitedToOne(optimal, i);
             }
         }
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("==============================================================");
         optimal.showpr();
         optimal.showrs();
         optimal.showRam();
@@ -37,6 +41,10 @@ public class Clock {
         optimal.showPR();
         optimal.showReplacedList();
         optimal.showPA();
+        System.out.println("==============================================================");
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
     public static void updateIsVisitedToOne(Optimal optimal, int currIndex) {

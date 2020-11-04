@@ -52,8 +52,16 @@ public class ProcessSynchronizationModel {
     public static void start() {
         init();
         getOrder();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("==============================================================");
         showOrder();
         getInstruction();
+        System.out.println("==============================================================");
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
     public static void getInstruction() {

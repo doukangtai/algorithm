@@ -14,8 +14,16 @@ public class RoundRobinAlgorithm {
     public static void start() {
         RoundRobin roundRobin = new RoundRobin();
         roundRobin.createGanttChart();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("==============================================================");
         roundRobin.showGanttChart();
         roundRobin.showTable();
+        System.out.println("==============================================================");
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 }
 

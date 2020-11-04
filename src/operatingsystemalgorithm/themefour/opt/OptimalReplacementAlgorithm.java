@@ -38,12 +38,20 @@ public class OptimalReplacementAlgorithm {
                 }
             }
         }
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("==============================================================");
         optimal.showpr();
         optimal.showrs();
         optimal.showRam();
         optimal.showPF();
         optimal.showPR();
         optimal.showReplacedList();
+        System.out.println("==============================================================");
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
     /**
