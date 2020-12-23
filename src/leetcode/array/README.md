@@ -221,3 +221,89 @@ public int removeElement(int[] nums, int val) {
 - 时间复杂度：O(n)
 - 空间复杂度：O(1)
 
+## [35. 搜索插入位置](https://leetcode-cn.com/problems/search-insert-position/)
+
+**题目描述**
+
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+
+你可以假设数组中无重复元素。
+
+示例 1:
+
+输入: [1,3,5,6], 5
+输出: 2
+示例 2:
+
+输入: [1,3,5,6], 2
+输出: 1
+示例 3:
+
+输入: [1,3,5,6], 7
+输出: 4
+示例 4:
+
+输入: [1,3,5,6], 0
+输出: 0
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/search-insert-position
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+**手写**
+
+```java
+public int searchInsert(int[] nums, int target) {
+    int index = -1;
+    for (int i = 0; i < nums.length; i++) {
+        if (index == -1 && nums[i] > target) {
+            index = i;
+        }
+        if (nums[i] == target) {
+            return i;
+        }
+    }
+    if (nums[nums.length - 1] < target) {
+        return nums.length;
+    }
+    return index;
+}
+```
+
+**题解**
+
+- 一次遍历nums，记录比targe第一个大的数的index，用于在nums中找不到target时，返回插入位置的index
+- 同时判断nums[i] == target，即找到相等的值，返回i
+- 或者在nums中找不到目标值，并且targe比数组中任何值都大，则插入最后，应该返回nums.length
+- 时间复杂度：O(n)
+- 空间复杂度：O(1)
+
+**官方方法一：二分查找**
+
+```java
+public int searchInsert(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length - 1;
+    int pos = nums.length;
+    while (left <= right) {
+        int mid = ((right - left) >> 1) + left;
+        if (target == nums[mid]) {
+            return mid;
+        } else if (target > nums[mid]) {
+            left = mid + 1;
+        } else {
+            pos = mid;
+            right = mid - 1;
+        }
+    }
+    return pos;
+}
+```
+
+**题解**
+
+- 利用二分查找，逐渐趋近第一个大于等于target的值的index
+- 用pos记录下可能大于等于target的index
+- 初始用int pos = nums.length;避免出现target比nums中的所有值都大的情况
+- 时间复杂度：O(log n)
+- 空间复杂度：O(1)
