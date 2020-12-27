@@ -1,5 +1,7 @@
 package test;
 
+import java.util.TreeMap;
+
 /**
  * @author 窦康泰
  * @date 2020/12/26
@@ -7,7 +9,11 @@ package test;
 public class Test {
 
     public static void main(String[] args) {
-        System.out.println("JDK7");
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        map.put(3, 1);
+        map.put(1, 1);
+        map.put(2, 1);
+        System.out.println(map);
     }
 
 }

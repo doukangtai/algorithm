@@ -67,13 +67,13 @@ public int removeDuplicates(int[] nums) {
 }
 ```
 
-**题解**
+**思路**
 
 - 与官方题解基本一样，多了temp辅助变量
 - 时间复杂度：O(n)
 - 空间复杂度：O(1)
 
-**官方方法：双指针法**
+**题解方法：双指针法**
 
 ```java
 public int removeDuplicates(int[] nums) {
@@ -91,7 +91,7 @@ public int removeDuplicates(int[] nums) {
 }
 ```
 
-**题解**
+**思路**
 
 - 用两个指针index和i，当nums[index] == nums[i]时，说明当前index处与后面的值重复，直接i++
 - 当nums[index] != nums[i]时，说明遇到新值，nums[++index] = nums[i];将新值赋值到index + 1处，继续前面的过程
@@ -165,14 +165,14 @@ public int removeElement(int[] nums, int val) {
 }
 ```
 
-**题解**
+**思路**
 
 - 遇到相等的元素，将后面的所有元素整体前移
 - 优缺点：频繁的赋值操作
 - 时间复杂度：O(n)
 - 空间复杂度：O(1)
 
-**官方方法一：双指针**
+**题解方法一：双指针**
 
 ```java
 public int removeElement(int[] nums, int val) {
@@ -187,7 +187,7 @@ public int removeElement(int[] nums, int val) {
 }
 ```
 
-**题解**
+**思路**
 
 - nums[i] != val，将nums[i]值赋值给nums[index]处
 - nums[i] == val，i++跳过当前相等的数
@@ -195,7 +195,7 @@ public int removeElement(int[] nums, int val) {
 - 时间复杂度：O(n)
 - 空间复杂度：O(1)
 
-**官方方法二：双指针 —— 当要删除的元素很少时**
+**题解方法二：双指针 —— 当要删除的元素很少时**
 
 ```java
 public int removeElement(int[] nums, int val) {
@@ -214,7 +214,7 @@ public int removeElement(int[] nums, int val) {
 }
 ```
 
-**题解**
+**思路**
 
 - 遇到nums[i] == val时，将数组最后一个元素换到nums[i]的位置，循环重复比较
 - 优缺点：减少了不必要的赋值操作
@@ -270,7 +270,7 @@ public int searchInsert(int[] nums, int target) {
 }
 ```
 
-**题解**
+**思路**
 
 - 一次遍历nums，记录比targe第一个大的数的index，用于在nums中找不到target时，返回插入位置的index
 - 同时判断nums[i] == target，即找到相等的值，返回i
@@ -278,7 +278,7 @@ public int searchInsert(int[] nums, int target) {
 - 时间复杂度：O(n)
 - 空间复杂度：O(1)
 
-**官方方法一：二分查找**
+**题解方法一：二分查找**
 
 ```java
 public int searchInsert(int[] nums, int target) {
@@ -300,7 +300,7 @@ public int searchInsert(int[] nums, int target) {
 }
 ```
 
-**题解**
+**思路**
 
 - 利用二分查找，逐渐趋近第一个大于等于target的值的index
 - 用pos记录下可能大于等于target的index
@@ -351,7 +351,7 @@ public int[][] transpose(int[][] A) {
 }
 ```
 
-**题解**
+**思路**
 
 - 与官方题解一样
 - 创建一个新数组newArr，将旧数组值赋值给新数组

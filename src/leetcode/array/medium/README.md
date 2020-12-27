@@ -98,7 +98,7 @@ public int getValue(int row, int col) {
 }
 ```
 
-**题解**
+**思路**
 
 - 有手就行
 
@@ -187,14 +187,14 @@ public int getWinner(int[] arr, int k) {
 }
 ```
 
-**题解**
+**思路**
 
 - HashMap<Integer, Integer> countMap = new HashMap<>();记录每个数获胜的次数
 - 用while判断maxCount < k && forCount <= arr.length << 1，找到需要**返回的数**，同时，控制过大的k导致的超时问题，需要左移一位是因为可能存在某个数获胜次数过多，arr.length << 1确保获取的数是获胜的数
 - 时间复杂度：O(n)
 - 空间复杂度：O(n)
 
-**非官方**
+**题解**
 
 ```java
 public int getWinner(int[] arr, int k) {
@@ -213,7 +213,7 @@ public int getWinner(int[] arr, int k) {
 }
 ```
 
-**题解**
+**思路**
 
 - 两两比较，保证后面的最大，不用移动
 
@@ -288,10 +288,136 @@ public boolean check(int key, int[] position, int m) {
 }
 ```
 
-**题解**
+**思路**
 
 - 没思路，看的答案
 - 合法的答案出现在**[1, position[position.length - 1] - position[0]]**中，因此采用**二分查找**的思想，依次尝试，符合条件的，则记录下当前尝试的值**value = mid;**尝试更大的值**left = mid + 1;**，不符合条件，则从更小的答案中尝试**right = mid - 1;**
 - check方法用于检查大小为key的间隔是否可以放下m个元素
 - 时间复杂度：O*(*n*log(*n**S*))，其中 n 为篮子的个数，S 为篮子位置的上限。对篮子位置排序需要 O(nlogn) 的时间复杂度，二分查找对篮子位置间隔进行二分，需要 O(logS) 的时间复杂度。每次统计答案是否符合要求需要 O(n) 的时间复杂度，因此总时间复杂度为 O(nlog n+nlog S) = O(nlog(nS))。
 - 空间复杂度：O(logn)，即为排序需要的栈空间，Arrays.sort空间复杂度log n，check递归空间复杂度log n。
+
+## [1438. 绝对差不超过限制的最长连续子数组](https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/)
+
+**题目描述**
+
+给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+
+如果不存在满足条件的子数组，则返回 0 。
+
+ 
+
+示例 1：
+
+输入：nums = [8,2,4,7], limit = 4
+输出：2 
+解释：所有子数组如下：
+[8] 最大绝对差 |8-8| = 0 <= 4.
+[8,2] 最大绝对差 |8-2| = 6 > 4. 
+[8,2,4] 最大绝对差 |8-2| = 6 > 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 > 4.
+[2] 最大绝对差 |2-2| = 0 <= 4.
+[2,4] 最大绝对差 |2-4| = 2 <= 4.
+[2,4,7] 最大绝对差 |2-7| = 5 > 4.
+[4] 最大绝对差 |4-4| = 0 <= 4.
+[4,7] 最大绝对差 |4-7| = 3 <= 4.
+[7] 最大绝对差 |7-7| = 0 <= 4. 
+因此，满足题意的最长子数组的长度为 2 。
+示例 2：
+
+输入：nums = [10,1,2,4,7,2], limit = 5
+输出：4 
+解释：满足题意的最长子数组是 [2,4,7,2]，其最大绝对差 |2-7| = 5 <= 5 。
+示例 3：
+
+输入：nums = [4,2,2,2,4,4,2,2], limit = 0
+输出：3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+**手写**
+
+```java
+public int longestSubarray(int[] nums, int limit) {
+    int maxLen = 0;
+    for (int i = 0; i < nums.length; i++) {
+        int rear = i;
+        int max = nums[i];
+        int min = nums[i];
+        int nextI = i;
+        boolean flag = true;
+        while (Math.abs(max - min) <= limit) {
+            if (nums[rear] != nums[i]) {
+                flag = false;
+            }
+            if (flag) {
+                nextI = rear;
+            }
+            maxLen = Math.max(maxLen, rear - i);
+            rear++;
+            if (rear >= nums.length) {
+                break;
+            }
+            max = Math.max(max, nums[rear]);
+            min = Math.min(min, nums[rear]);
+        }
+        i = nextI;
+    }
+    return maxLen + 1;
+}
+```
+
+**思路**
+
+- 用i和rear标记数组的一段范围（rear指针不断后移），从中找尽可能满足Math.abs(max - min) <= limit的数组最大范围
+- 注意很多相同数字的情况：用nextI和flag标记相同数字的情况，便于下次从nextI处继续向后找，避免出现做无用功
+- 时间复杂度：O(n^2)
+- 空间复杂度：O(1)
+
+**题解**
+
+```java
+public int longestSubarray(int[] nums, int limit) {
+    // 两个双端队列维护nums中在窗口内的最大值和最小值
+    // maxQ由大到小
+    Deque<Integer> maxQ = new LinkedList<>();
+    // minQ由小到大
+    Deque<Integer> minQ = new LinkedList<>();
+    int ans = 0;
+    // 左窗口
+    int start = 0;
+    // 右窗口end
+    for (int end = 0; end < nums.length; end++) {
+        // 维护maxQ
+        while (!maxQ.isEmpty() && nums[maxQ.peekLast()] < nums[end]) {
+            maxQ.pollLast();
+        }
+        maxQ.add(end);
+        // 维护minQ
+        while (!minQ.isEmpty() && nums[minQ.peekLast()] > nums[end]) {
+            minQ.pollLast();
+        }
+        minQ.add(end);
+        // 大于limit表示不再范围内，左窗口右移缩小范围，否则跳出while进入下次for，即右窗口右移扩大范围
+        while (!maxQ.isEmpty() && !minQ.isEmpty() && nums[maxQ.peek()] - nums[minQ.peek()] > limit) {
+            if (maxQ.peek() <= start) {
+                maxQ.poll();
+            }
+            if (minQ.peek() <= start) {
+                minQ.poll();
+            }
+            start++;
+        }
+        ans = Math.max(ans, end - start + 1);
+    }
+    return ans;
+}
+```
+
+**思路**
+
+- 双单调队列+滑动窗口
+- 用两个单调队列维护窗口内的最大值和最小值（队列存放数组索引），保证最大值与最小值差小于等于limit
+- 时间复杂度：O(n)
+- 空间复杂度：O(n)
