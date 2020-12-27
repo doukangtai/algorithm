@@ -291,11 +291,7 @@ public boolean check(int key, int[] position, int m) {
 **题解**
 
 - 没思路，看的答案
-
 - 合法的答案出现在**[1, position[position.length - 1] - position[0]]**中，因此采用**二分查找**的思想，依次尝试，符合条件的，则记录下当前尝试的值**value = mid;**尝试更大的值**left = mid + 1;**，不符合条件，则从更小的答案中尝试**right = mid - 1;**
-
 - check方法用于检查大小为key的间隔是否可以放下m个元素
-
 - 时间复杂度：O*(*n*log(*n**S*))，其中 n 为篮子的个数，S 为篮子位置的上限。对篮子位置排序需要 O(nlogn) 的时间复杂度，二分查找对篮子位置间隔进行二分，需要 O(logS) 的时间复杂度。每次统计答案是否符合要求需要 O(n) 的时间复杂度，因此总时间复杂度为 O(nlog n+nlog S) = O(nlog(nS))。
-
-  空间复杂度：O(logn)，即为排序需要的栈空间。
+- 空间复杂度：O(logn)，即为排序需要的栈空间，Arrays.sort空间复杂度log n，check递归空间复杂度log n。
