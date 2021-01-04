@@ -421,3 +421,134 @@ public int longestSubarray(int[] nums, int limit) {
 - 用两个单调队列维护窗口内的最大值和最小值（队列存放数组索引），保证最大值与最小值差小于等于limit
 - 时间复杂度：O(n)
 - 空间复杂度：O(n)
+
+## [1267. 统计参与通信的服务器](https://leetcode-cn.com/problems/count-servers-that-communicate/)
+
+**题目描述**
+
+这里有一幅服务器分布图，服务器的位置标识在 m * n 的整数矩阵网格 grid 中，1 表示单元格上有服务器，0 表示没有。
+
+如果两台服务器位于同一行或者同一列，我们就认为它们之间可以进行通信。
+
+请你统计并返回能够与至少一台其他服务器进行通信的服务器的数量。
+
+ 
+
+示例 1：
+
+![CountServersThatCommunicate1](E:\project\idea-project\algorithm\src\leetcode\array\medium\images\CountServersThatCommunicate1.jpg)
+
+输入：grid = [[1,0],[0,1]]
+输出：0
+解释：没有一台服务器能与其他服务器进行通信。
+示例 2：
+
+![CountServersThatCommunicate2](E:\project\idea-project\algorithm\src\leetcode\array\medium\images\CountServersThatCommunicate2.jpg)
+
+输入：grid = [[1,0],[1,1]]
+输出：3
+解释：所有这些服务器都至少可以与一台别的服务器进行通信。
+示例 3：
+
+![CountServersThatCommunicate3](E:\project\idea-project\algorithm\src\leetcode\array\medium\images\CountServersThatCommunicate3.jpg)
+
+输入：grid = [[1,1,0,0],[0,0,1,0],[0,0,1,0],[0,0,0,1]]
+输出：4
+解释：第一行的两台服务器互相通信，第三列的两台服务器互相通信，但右下角的服务器无法与其他服务器通信。
+
+
+提示：
+
+m == grid.length
+n == grid[i].length
+1 <= m <= 250
+1 <= n <= 250
+grid[i][j] == 0 or 1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/count-servers-that-communicate
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+**手写**
+
+```java
+public int countServers(int[][] grid) {
+    int[][] tempArr = new int[grid.length][grid[0].length];
+    int countSum = 0;
+    for (int i = 0; i < grid.length; i++) {
+        int count = 0;
+        int x = -1;
+        int y = -1;
+        for (int j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == 1) {
+                count++;
+                if (count <= 1) {
+                    x = i;
+                    y = j;
+                } else {
+                    tempArr[x][y] = 1;
+                    tempArr[i][j] = 1;
+                }
+            }
+        }
+        countSum = count >= 2 ? countSum + count : countSum;
+    }
+    for (int i = 0; i < grid[0].length; i++) {
+        int count = 0;
+        int countRepeat = 0;
+        for (int j = 0; j < grid.length; j++) {
+            if (grid[j][i] == 1) {
+                count++;
+                if (tempArr[j][i] == 1) {
+                    countRepeat++;
+                }
+            }
+        }
+        if (count >= 2) {
+            count -= countRepeat;
+            countSum += count;
+        }
+    }
+    return countSum;
+}
+```
+
+**思路**
+
+- 先横向遍历统计出横向可以通信的主机，注意count大于1时才标记tempArr[i] [j] = 1
+- 再纵向遍历统计出纵向可以通信的主机，注意去重
+- 时间复杂度：O(m * n)
+- 空间复杂度：O(m * n)
+
+**题解**
+
+```java
+public int countServers(int[][] grid) {
+    int sum = 0;
+    int[] xCount = new int[grid.length];
+    int[] yCount = new int[grid[0].length];
+    for (int i = 0; i < grid.length; i++) {
+        for (int j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == 1) {
+                xCount[i]++;
+                yCount[j]++;
+            }
+        }
+    }
+    for (int i = 0; i < grid.length; i++) {
+        for (int j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == 1 && (xCount[i] > 1 || yCount[j] > 1)) {
+                sum++;
+            }
+        }
+    }
+    return sum;
+}
+```
+
+**思路**
+
+- 先遍历一遍，用xCount和yCount记录每行和每列多少个主机
+- 第二次遍历，判断xCount[i] > 1，即此行主机数大于1个，可以统计进sum中，同理，yCount为列
+- 时间复杂度：O(m * n)
+- 空间复杂度：O(m + n)
