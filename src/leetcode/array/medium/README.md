@@ -552,3 +552,104 @@ public int countServers(int[][] grid) {
 - 第二次遍历，判断xCount[i] > 1，即此行主机数大于1个，可以统计进sum中，同理，yCount为列
 - 时间复杂度：O(m * n)
 - 空间复杂度：O(m + n)
+
+## [1074. 元素和为目标值的子矩阵数量](https://leetcode-cn.com/problems/number-of-submatrices-that-sum-to-target/)
+
+**题目描述**
+
+给出矩阵 matrix 和目标值 target，返回元素总和等于目标值的非空子矩阵的数量。
+
+子矩阵 x1, y1, x2, y2 是满足 x1 <= x <= x2 且 y1 <= y <= y2 的所有单元 matrix[x][y] 的集合。
+
+如果 (x1, y1, x2, y2) 和 (x1', y1', x2', y2') 两个子矩阵中部分坐标不同（如：x1 != x1'），那么这两个子矩阵也不同。
+
+ 
+
+示例 1：
+
+输入：matrix = [[0,1,0],[1,1,1],[0,1,0]], target = 0
+输出：4
+解释：四个只含 0 的 1x1 子矩阵。
+示例 2：
+
+输入：matrix = [[1,-1],[-1,1]], target = 0
+输出：5
+解释：两个 1x2 子矩阵，加上两个 2x1 子矩阵，再加上一个 2x2 子矩阵。
+
+
+提示：
+
+1 <= matrix.length <= 300
+1 <= matrix[0].length <= 300
+-1000 <= matrix[i] <= 1000
+-10^8 <= target <= 10^8
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/number-of-submatrices-that-sum-to-target
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+**手写**
+
+```java
+public int numSubmatrixSumTarget(int[][] matrix, int target) {
+    int count = 0;
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix[i].length; j++) {
+            for (int k = i; k < matrix.length; k++) {
+                for (int l = j; l < matrix[k].length; l++) {
+                    int sumTemp = 0;
+                    for (int m = i; m <= k; m++) {
+                        for (int n = j; n <= l; n++) {
+                            sumTemp += matrix[m][n];
+                        }
+                    }
+                    if (target == sumTemp) {
+                        count++;
+                    }
+                }
+            }
+        }
+    }
+    return count;
+}
+```
+
+**思路**
+
+- 六层for循环、时间复杂度太高，未通过
+
+**题解一**
+
+```java
+public int numSubmatrixSumTarget(int[][] matrix, int target) {
+    int[][] sum = new int[matrix.length + 1][matrix[0].length + 1];
+    for (int i = 0; i < matrix.length; i++) {
+        int tempSum = 0;
+        for (int j = 0; j < matrix[i].length; j++) {
+            tempSum += matrix[i][j];
+            sum[i + 1][j + 1] = sum[i][j + 1] + tempSum;
+        }
+    }
+    int count = 0;
+    for (int i = 1; i < sum.length; i++) {
+        for (int j = 1; j < sum[i].length; j++) {
+            for (int k = i; k < sum.length; k++) {
+                for (int l = j; l < sum[k].length; l++) {
+                    int s = sum[k][l] - sum[i - 1][l] - sum[k][j - 1] + sum[i - 1][j - 1];
+                    if (target == s) {
+                        count++;
+                    }
+                }
+            }
+        }
+    }
+    return count;
+}
+```
+
+**思路**
+
+- 先通过双层for循环，将以(0,0)与(x,y)围成的矩形的和求出来，放在sum[x] [y]位置
+- sum[k] [l] - sum[i - 1] [l] - sum[k] [j - 1] + sum[i - 1] [j - 1];利用求出(i,j)与(k,l)围成的矩形的和
+- 时间复杂度：O(n^2 * m^2)
+- 空间复杂度：O((m + 1) * (n + 1))
