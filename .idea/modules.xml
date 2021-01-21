@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/algorithm.iml" filepath="$PROJECT_DIR$/algorithm.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdk7module/jdk7module.iml" filepath="$PROJECT_DIR$/jdk7module/jdk7module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mavenmodule/mavenmodule.iml" filepath="$PROJECT_DIR$/mavenmodule/mavenmodule.iml" />
     </modules>
   </component>
 </project>
