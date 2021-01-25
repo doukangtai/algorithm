@@ -1,4 +1,4 @@
-package leetcode.bfs;
+package leetcode.bfs.medium;
 
 import java.util.HashSet;
 import java.util.LinkedList;

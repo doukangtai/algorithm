@@ -2,6 +2,8 @@ package test;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author 窦康泰
@@ -9,9 +11,146 @@ import java.util.concurrent.*;
  */
 public class Test {
     public static void main(String[] args) {
-//        ME1();
-//        ME2();
-        ME3();
+        MH2();
+    }
+
+    public static void MH2() {
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+                2,
+                4,
+                1,
+                TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>(3),
+                Executors.defaultThreadFactory(),
+//                new ThreadPoolExecutor.AbortPolicy()
+//                new ThreadPoolExecutor.CallerRunsPolicy()
+//                new ThreadPoolExecutor.DiscardOldestPolicy()
+                new ThreadPoolExecutor.DiscardPolicy()
+        );
+        try {
+            for (int i = 0; i < 8; i++) {
+                threadPool.execute(() -> {
+                    System.out.println(Thread.currentThread().getName());
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            threadPool.shutdown();
+        }
+    }
+
+    public static void MH1() {
+//        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+//        ExecutorService threadPool = Executors.newFixedThreadPool(5);
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+        try {
+            for (int i = 0; i < 10; i++) {
+                threadPool.execute(() -> {
+                    System.out.println(Thread.currentThread().getName());
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            threadPool.shutdown();
+        }
+    }
+
+    public static void MG1() {
+        SynchronousQueue<Integer> queue = new SynchronousQueue<>();
+        new Thread(() -> {
+            try {
+                for (int i = 0; i < 3; i++) {
+                    queue.put(i);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+            }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                for (int i = 0; i < 3; i++) {
+                    System.out.println(queue.take());
+                    TimeUnit.SECONDS.sleep(1);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public static void TestMF4() {
+        ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(3);
+        new Thread(() -> {
+            MF4(queue);
+        }).start();
+//        MF4(queue);
+        new Thread(() -> {
+            System.out.println("第1个 -> " + queue.poll());
+            System.out.println("第2个 -> " + queue.poll());
+            System.out.println("第3个 -> " + queue.poll());
+            try {
+                System.out.println("第4个 -> " + queue.poll(2, TimeUnit.SECONDS));
+                System.out.println("第5个 -> " + queue.poll(3, TimeUnit.SECONDS));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public static void MF4(ArrayBlockingQueue<Integer> queuep) {
+        ArrayBlockingQueue<Integer> queue = queuep;
+        System.out.println(queue.offer(1));
+        System.out.println(queue.offer(2));
+        System.out.println(queue.offer(3));
+        try {
+            System.out.println(queue.offer(4, 3, TimeUnit.SECONDS));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void MF3() {
+        ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(3);
+        try {
+            queue.put(1);
+            queue.put(2);
+            queue.put(3);
+//            queue.put(3);
+            System.out.println(queue.take());
+            System.out.println(queue.take());
+            System.out.println(queue.take());
+            System.out.println(queue.take());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void MF2() {
+        ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(3);
+        System.out.println(queue.offer(1));
+        System.out.println(queue.offer(2));
+        System.out.println(queue.offer(3));
+//        System.out.println(queue.offer(3));
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+//        System.out.println(queue.poll());
+    }
+
+    public static void MF1() {
+        ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(3);
+        System.out.println(queue.add(1));
+        System.out.println(queue.add(2));
+        System.out.println(queue.add(3));
+//        System.out.println(queue.add(3));
+        System.out.println(queue.remove());
+        System.out.println(queue.remove());
+        System.out.println(queue.remove());
+//        System.out.println(queue.remove());
     }
 
     public static void ME3() {
@@ -180,6 +319,73 @@ public class Test {
             new Thread(() -> {
                 list.add(new String(UUID.randomUUID().toString().substring(0, 5)));
                 System.out.println(list);
+            }).start();
+        }
+    }
+}
+
+class MyCache2 {
+    private Map<Integer, Object> map = new HashMap<>();
+    private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
+    public void write() {
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                readWriteLock.writeLock().lock();
+                try {
+                    System.out.println(Thread.currentThread().getName() + " -> 线程开始写");
+                    map.put(finalI, new Object());
+                    System.out.println(Thread.currentThread().getName() + " -> 线程写完");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    readWriteLock.writeLock().unlock();
+                }
+            }).start();
+        }
+    }
+
+    public void read() {
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                readWriteLock.readLock().lock();
+                try {
+                    System.out.println(Thread.currentThread().getName() + " -> 线程开始读");
+                    map.get(finalI);
+                    System.out.println(Thread.currentThread().getName() + " -> 线程读完");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    readWriteLock.readLock().unlock();
+                }
+            }).start();
+        }
+    }
+}
+
+class MyCache1 {
+    private Map<Integer, Object> map = new HashMap<>();
+
+    public void write() {
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                System.out.println(Thread.currentThread().getName() + " -> 线程开始写");
+                map.put(finalI, new Object());
+                System.out.println(Thread.currentThread().getName() + " -> 线程写完");
+            }).start();
+        }
+    }
+
+    public void read() {
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                System.out.println(Thread.currentThread().getName() + " -> 线程开始读");
+                map.get(finalI);
+                System.out.println(Thread.currentThread().getName() + " -> 线程读完");
             }).start();
         }
     }

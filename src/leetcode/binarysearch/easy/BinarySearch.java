@@ -1,4 +1,4 @@
-package leetcode.binarysearch;
+package leetcode.binarysearch.easy;
 
 /**
  * @author 窦康泰
