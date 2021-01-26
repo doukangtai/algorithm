@@ -4,6 +4,11 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author 窦康泰
@@ -11,7 +16,67 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class Test {
     public static void main(String[] args) {
-        MH2();
+    }
+
+    public static void MJ1() {
+        User u1 = new User(1, "aaa", 18);
+        User u2 = new User(2, "bbb", 19);
+        User u3 = new User(3, "ccc", 20);
+        User u4 = new User(4, "ddd", 21);
+        User u5 = new User(5, "eee", 22);
+        User u6 = new User(6, "fff", 23);
+        List<User> list = Arrays.asList(u1, u2, u3, u4, u5, u6);
+        Stream<User> stream = list.stream();
+        stream
+                .filter(user -> user.getId() % 2 == 0)
+                .filter(user -> user.getAge() > 20)
+                .map(user -> user.getName().toUpperCase())
+                .sorted((o1, o2) -> o2.compareTo(o1))
+                .forEach(System.out::println);
+    }
+
+    public static void MI4() {
+//        Supplier<String> supplier = new Supplier<String>() {
+//            @Override
+//            public String get() {
+//                return "supplier";
+//            }
+//        };
+        Supplier<String> supplier = () -> "supplier";
+        System.out.println(supplier.get());
+    }
+
+    public static void MI3() {
+//        Consumer<String> consumer = new Consumer<String>() {
+//            @Override
+//            public void accept(String s) {
+//                System.out.println(s);
+//            }
+//        };
+        Consumer<String> consumer = s -> System.out.println(s);
+        consumer.accept("hhh");
+    }
+
+    public static void MI2() {
+//        Predicate<String> predicate = new Predicate<String>() {
+//            @Override
+//            public boolean test(String s) {
+//                return s.isEmpty();
+//            }
+//        };
+        Predicate<String> predicate = s -> s.isEmpty();
+        System.out.println(predicate.test(""));
+    }
+
+    public static void MI1() {
+//        Function<String, Integer> function = new Function<String, Integer>() {
+//            @Override
+//            public Integer apply(String s) {
+//                return Integer.parseInt(s);
+//            }
+//        };
+        Function<String, Integer> function = s -> Integer.parseInt(s);
+        System.out.println(function.apply("7758"));
     }
 
     public static void MH2() {
@@ -388,5 +453,50 @@ class MyCache1 {
                 System.out.println(Thread.currentThread().getName() + " -> 线程读完");
             }).start();
         }
+    }
+}
+
+class User {
+    private Integer id;
+    private String name;
+    private Integer age;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public User(Integer id, String name, Integer age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
     }
 }
