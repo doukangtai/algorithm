@@ -1,4 +1,4 @@
-package test.proxy.stc;
+package designpattern.proxy.stc;
 
 /**
  * @author 窦康泰
