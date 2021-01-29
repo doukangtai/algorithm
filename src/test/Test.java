@@ -1,26 +1,19 @@
 package test;
 
+import java.util.Arrays;
+
 /**
  * @author 窦康泰
  * @date 2021/01/21
  */
 public class Test {
     public static void main(String[] args) {
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(Thread.currentThread().getName());
-        });
-        thread.start();
-        thread.interrupt();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        int[] ints = new int[5];
+        int num = 1;
+        for (int i = 0; i < ints.length; i++) {
+            ints[i] = num;
         }
-        System.out.println("aaa");
+        num = 5;
+        System.out.println(Arrays.toString(ints));
     }
 }

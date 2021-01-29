@@ -1,4 +1,4 @@
-package leetcode.sandaoqvjianwenti;
+package leetcode.sandaoqvjianwenti.medium;
 
 import java.util.ArrayList;
 import java.util.List;
