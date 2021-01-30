@@ -1,4 +1,4 @@
-package leetcode.gupiaomaimaiwenti;
+package leetcode.gupiaomaimaiwenti.easy;
 
 /**
  * @author 窦康泰
