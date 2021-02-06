@@ -1,4 +1,6 @@
-package leetcode.tree.medium.findduplicatesubtrees;
+package leetcode.tree.medium;
+
+import leetcode.node.type1.TreeNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,33 +41,5 @@ public class FindDuplicateSubtrees {
         }
         memo.put(s, count + 1);
         return sb;
-    }
-}
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    @Override
-    public String toString() {
-        return "TreeNode{" +
-                "val=" + val +
-                ", left=" + left +
-                ", right=" + right +
-                '}';
-    }
-
-    TreeNode() {
-    }
-
-    TreeNode(int val) {
-        this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
     }
 }

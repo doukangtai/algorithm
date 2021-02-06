@@ -1,4 +1,6 @@
-package leetcode.tree.medium.constructbinarytreefrominorderandpostordertraversal;
+package leetcode.tree.medium;
+
+import leetcode.node.type1.TreeNode;
 
 /**
  * @author 窦康泰
@@ -25,24 +27,5 @@ public class ConstructBinaryTreeFromInorderAndPostorderTraversal {
         root.left = build(inorder, inLeft, index - 1, postorder, postLeft, postLeft + leftSize - 1);
         root.right = build(inorder, index + 1, inRight, postorder, postLeft + leftSize, postRight - 1);
         return root;
-    }
-}
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode() {
-    }
-
-    TreeNode(int val) {
-        this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
     }
 }

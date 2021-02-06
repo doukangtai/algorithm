@@ -1,4 +1,6 @@
-package leetcode.tree.medium.maximumbinarytree;
+package leetcode.tree.medium;
+
+import leetcode.node.type1.TreeNode;
 
 /**
  * @author 窦康泰
@@ -25,24 +27,5 @@ public class MaximumBinaryTree {
         root.left = build(nums, left, index - 1);
         root.right = build(nums, index + 1, right);
         return root;
-    }
-}
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode() {
-    }
-
-    TreeNode(int val) {
-        this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
     }
 }

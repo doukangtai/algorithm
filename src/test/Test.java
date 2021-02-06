@@ -6,5 +6,10 @@ package test;
  */
 public class Test {
     public static void main(String[] args) {
+        String str = new String("abc");
+        String intern = str.intern();
+        String s = "abc";
+        System.out.println(str == s);
+        System.out.println(s == intern);
     }
 }

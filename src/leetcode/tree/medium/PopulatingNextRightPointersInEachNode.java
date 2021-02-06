@@ -1,5 +1,7 @@
 package leetcode.tree.medium;
 
+import leetcode.node.type2.Node;
+
 /**
  * @author 窦康泰
  * @date 2021/01/30
@@ -21,25 +23,5 @@ public class PopulatingNextRightPointersInEachNode {
         merge(left.left, left.right);
         merge(right.left, right.right);
         merge(left.right, right.left);
-    }
-}
-
-class Node {
-    public int val;
-    public Node left;
-    public Node right;
-    public Node next;
-
-    public Node() {}
-
-    public Node(int _val) {
-        val = _val;
-    }
-
-    public Node(int _val, Node _left, Node _right, Node _next) {
-        val = _val;
-        left = _left;
-        right = _right;
-        next = _next;
     }
 }
