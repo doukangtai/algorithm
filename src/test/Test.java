@@ -1,5 +1,7 @@
 package test;
 
+import java.util.Scanner;
+
 /**
  * @author 窦康泰
  * @date 2021/01/21
@@ -11,5 +13,6 @@ public class Test {
         String s = "abc";
         System.out.println(str == s);
         System.out.println(s == intern);
+        new Scanner(System.in).next();
     }
 }
