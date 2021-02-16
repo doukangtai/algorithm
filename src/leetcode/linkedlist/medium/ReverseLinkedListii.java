@@ -1,5 +1,7 @@
 package leetcode.linkedlist.medium;
 
+import leetcode.node.type4.ListNode;
+
 /**
  * @author 窦康泰
  * @date 2021/02/01
@@ -32,30 +34,5 @@ public class ReverseLinkedListii {
         head.next.next = head;
         head.next = succNext;
         return lase;
-    }
-}
-
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode() {
-    }
-
-    ListNode(int val) {
-        this.val = val;
-    }
-
-    ListNode(int val, ListNode next) {
-        this.val = val;
-        this.next = next;
-    }
-
-    @Override
-    public String toString() {
-        return "ListNode{" +
-                "val=" + val +
-                ", next=" + next +
-                '}';
     }
 }
