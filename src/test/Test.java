@@ -1,6 +1,6 @@
 package test;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author 窦康泰
@@ -8,9 +8,108 @@ import java.util.Arrays;
  */
 public class Test {
     public static void main(String[] args) {
-        int[] nums = {5, 4, 3, 2, 1};
-        Test test = new Test();
-        show(test.heapSort(nums));
+        new Test().test();
+    }
+
+    private void test() {
+    }
+}
+
+class Test2 {
+    public static void main(String[] args) {
+        int[] nums = {5, 1, 4, 2, 3, 3, 2, 4, 1, 5};
+        Test2 test = new Test2();
+        show(test.countSort(nums));
+        show(test.bucketSort(nums, 3));
+        show(test.radixSort(nums));
+        learn();
+    }
+
+    public static void learn() {
+    }
+
+    public int[] radixSort(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            max = Math.max(num, max);
+        }
+        int maxLen = 0;
+        while (max != 0) {
+            max /= 10;
+            maxLen++;
+        }
+        List<List<Integer>> buckets = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            buckets.add(new ArrayList<>());
+        }
+        int mod = 10;
+        int div = 1;
+        for (int i = 0; i < maxLen; i++, mod *= 10, div *= 10) {
+            for (int num : nums) {
+                int index = (num % mod) / div;
+                buckets.get(index).add(num);
+            }
+            int j = 0;
+            for (List<Integer> bucket : buckets) {
+                for (Integer num : bucket) {
+                    nums[j++] = num;
+                }
+                bucket.clear();
+            }
+        }
+        return nums;
+    }
+
+    public int[] bucketSort(int[] nums, int bucketSize) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int num : nums) {
+            max = Math.max(num, max);
+            min = Math.min(num, min);
+        }
+        int bucketCount = (max - min) / bucketSize + 1;
+        List<List<Integer>> buckets = new ArrayList<>(bucketCount);
+        for (int i = 0; i < bucketCount; i++) {
+            buckets.add(new ArrayList<>());
+        }
+        for (int num : nums) {
+            int index = (num - min) / bucketSize;
+            buckets.get(index).add(num);
+        }
+        for (List<Integer> bucket : buckets) {
+            Collections.sort(bucket);
+        }
+        int i = 0;
+        for (List<Integer> bucket : buckets) {
+            for (Integer num : bucket) {
+                nums[i++] = num;
+            }
+        }
+        return nums;
+    }
+
+    public int[] countSort(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int num : nums) {
+            max = Math.max(num, max);
+            min = Math.min(num, min);
+        }
+        int[] count = new int[max - min + 1];
+        for (int i = 0; i < nums.length; i++) {
+            count[nums[i] - min]++;
+        }
+        int j = 0;
+        int i = 0;
+        while (j < nums.length) {
+            if (count[i] != 0) {
+                nums[j++] = i + min;
+                count[i]--;
+            } else {
+                i++;
+            }
+        }
+        return nums;
     }
 
     public int[] heapSort(int[] nums) {
