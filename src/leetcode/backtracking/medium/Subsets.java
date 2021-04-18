@@ -8,6 +8,27 @@ import java.util.List;
  * @date 2021/03/26
  */
 public class Subsets {
+    static class Method2 {
+        public static void main(String[] args) {
+            System.out.println(new Method2().subsets(new int[]{1, 2, 3}));
+        }
+
+        public List<List<Integer>> subsets(int[] nums) {
+            List<List<Integer>> res = new ArrayList<>();
+            help(nums, new ArrayList<>(), res, 0);
+            return res;
+        }
+
+        private void help(int[] nums, List<Integer> list, List<List<Integer>> res, int index) {
+            res.add(new ArrayList<>(list));
+            for (int i = index; i < nums.length; i++) {
+                list.add(nums[i]);
+                help(nums, list, res, i + 1);
+                list.remove(list.size() - 1);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println(new Subsets().subsets(new int[]{1, 2, 3}));
     }
