@@ -1,5 +1,7 @@
 package leetcode.backtracking.hard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,6 +10,62 @@ import java.util.List;
  * @date 2021/01/22
  */
 public class NQueens {
+    static class Method2 {
+        public static void main(String[] args) {
+            System.out.println(new Method2().solveNQueens(4));
+        }
+        public List<List<String>> solveNQueens(int n) {
+            List<List<String>> res = new ArrayList<>();
+            char[][] board = new char[n][n];
+            for (char[] b : board) {
+                Arrays.fill(b, '.');
+            }
+            help(res, board, 0);
+            return res;
+        }
+
+        private void help(List<List<String>> res, char[][] board, int row) {
+            if (row >= board.length) {
+                List<String> list = new ArrayList<>();
+                for (char[] b : board) {
+                    list.add(String.valueOf(b));
+                }
+                res.add(list);
+                return;
+            }
+            for (int col = 0; col < board[0].length; col++) {
+                if (!valid(board, row, col)) {
+                    continue;
+                }
+                board[row][col] = 'Q';
+                help(res, board, row + 1);
+                board[row][col] = '.';
+            }
+        }
+
+        private boolean valid(char[][] board, int row, int col) {
+            for (int i = 0; i < row; i++) {
+                if (board[i][col] == 'Q') {
+                    return false;
+                }
+            }
+            int r = row;
+            int c = col;
+            while (r >= 0 && c >= 0) {
+                if (board[r--][c--] == 'Q') {
+                    return false;
+                }
+            }
+            r = row;
+            c = col;
+            while (r >= 0 && c < board.length) {
+                if (board[r--][c++] == 'Q') {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 
     public static void main(String[] args) {
         List<List<String>> solveNQueens = new NQueens().solveNQueens(4);
