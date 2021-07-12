@@ -1,0 +1,13 @@
+package imooc.design.pattern.behavioral.iterator;
+
+/**
+ * @author 窦康泰
+ * @date 2021/07/12
+ */
+public interface CourseAggregate {
+    void addCourse(Course course);
+
+    void removeCourse(Course course);
+
+    CourseIterator getCourseIterator();
+}
