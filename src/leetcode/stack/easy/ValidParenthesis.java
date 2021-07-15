@@ -34,4 +34,25 @@ public class ValidParenthesis {
         System.out.println(new ValidParenthesis().isValid("()[]}"));
     }
 
+    static class Method2 {
+        public boolean isValid(String s) {
+            Stack<Character> stack = new Stack<>();
+            char[] chars = s.toCharArray();
+            for (char c : chars) {
+                if (c == '(' || c == '{' || c == '[') {
+                    stack.push(c);
+                } else {
+                    if (stack.isEmpty()) {
+                        return false;
+                    }
+                    Character popChar = stack.pop();
+                    if ((popChar == '(' && c == ')') || (popChar == '{' && c == '}') || (popChar == '[' && c == ']')) {
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return stack.isEmpty();
+        }
+    }
 }
