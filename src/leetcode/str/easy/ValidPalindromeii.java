@@ -1,4 +1,4 @@
-package leetcode.str;
+package leetcode.str.easy;
 
 /**
  * @author 窦康泰
